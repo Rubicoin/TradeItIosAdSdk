@@ -25,15 +25,10 @@ class SSLPinningDelegate: NSObject, URLSessionDelegate {
         SecTrustSetPolicies(serverTrust!, policies);
 
         // Evaluate server certificate
-        #if swift(>=2.3)
-            var result: SecTrustResultType = SecTrustResultType.invalid
-            SecTrustEvaluate(serverTrust!, &result)
-            return (result == SecTrustResultType.unspecified || result == SecTrustResultType.proceed)
-        #else
-            var result: SecTrustResultType = 0
-            SecTrustEvaluate(serverTrust!, &result)
-            return (Int(result) == SecTrustResultType.unspecified || Int(result) == SecTrustResultType.proceed)
-        #endif
+        var result: SecTrustResultType = SecTrustResultType.invalid
+        SecTrustEvaluate(serverTrust!, &result)
+        return (result == SecTrustResultType.unspecified || result == SecTrustResultType.proceed)
+        
     }
 
     func isSSLCertificateMatching(_ certificate: SecCertificate?) -> Bool {
